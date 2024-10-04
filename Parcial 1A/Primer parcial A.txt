@@ -1,0 +1,75 @@
+#######################################################################################################################################
+# Pérez Reséndiz Iris Mabel, 276470.
+# Primerparcial, exámen A.
+
+# Teoría
+
+1. En el comando:
+git commit -m "mensaje"
+¿Para qué sirve la bandera -m
+#-b) Especifica el mensaje del commit directamente desde la línea de comandos.
+
+2. ¿En qué casos se usan la 4ta y 5ta forma normal?
+#-a) Como excepciones o casos avanzados que van más allá de las primeras tres formas normales.
+
+3. ¿En qué forma normal se eliminan los grupos repetidos?
+
+#-La primeraforma normal, para ser especificos y de acuerdo a los apuntes "Elimina grupos repetidos en tablas individuales".
+
+4. Explica la diferencia entre la cláusula WHERE y la cláusula HAVING.
+#-El HAVING debe ir después de la GROUP BY y antes del ORDER BY; ademas puede incluir una o más condiciones las cuales pueden utilizar Aggregate functions. La diferencia principal es que un WHERE filtra las filas antes de agruparlas, mientras que un HAVING filtra los grupos después de agruparlas.
+
+5.Dado el siguiente query:
+SELECT 
+    nombre, 
+    salario
+FROM 
+    empleados
+WHERE 
+    salario > 30000
+ORDER BY 
+    salario DESC;
+¿Cuál es el orden de ejecución?
+
+#-c) FROM -> WHERE -> SELECT -> ORDER BY
+
+#######################################################################################################################################
+# Práctica
+
+1.Escribe un query para obtener el promedio de calificaciones por cada materia en la tabla calificaciones. Incluye solo aquellas materias que tienen al menos una calificación registrada. Ordena del mejor promedio al peor promedio.
+
+```SQL
+-- Solución:
+SELECT nombre_materia, 
+    AVG(calificacion) AS Promedio
+FROM calificaciones
+WHERE calificacion IS NOT NULL
+GROUP BY nombre_materia
+ORDER BY Promedio DESC;
+
+```
+
+2.Escribe un query que muestre el nombre y apellido de los alumnos que tienen al menos una calificación registrada. Ordena el resultado por apellido.
+
+```SQL
+-- Solución:
+SELECT DISTINCT n.nombre, n.apellido
+FROM alumnos AS n
+INNER JOIN calificaciones
+USING(expediente)
+ORDER BY n.apellido;
+
+```
+
+3.Escribe un query que muestre el nombre, apellido y calificación máxima de cada alumno. Considera solo las materias en las que el alumno ha recibido calificación.
+
+```SQL
+-- Solución:
+SELECT n.nombre, n.apellido, MAX(m.calificacion)
+FROM alumnos AS n
+LEFT JOIN calificaciones AS m
+ON n.expediente = m.expediente
+WHERE m.calificacion IS NOT NULL
+GROUP BY n.expediente, n.nombre, n.apellido;
+
+```
